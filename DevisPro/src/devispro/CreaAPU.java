@@ -12,9 +12,13 @@ import javax.swing.table.*;
  * @author Crixo
  */
 public class CreaAPU extends javax.swing.JFrame {
-    public static DefaultTableModel modMat;
+    
     APU p1;
      public static DefaultTableModel modelo_equipo;
+     public static DefaultTableModel modelo_materiales;
+     public static DefaultTableModel modelo_transporte;
+     public static DefaultTableModel modelo_mano_de_obre;
+
     /**
      * Creates new form CreaAPU
      */
@@ -27,12 +31,30 @@ public class CreaAPU extends javax.swing.JFrame {
         jtbEquipo.setModel(e);
         modelo_equipo =(DefaultTableModel) jtbEquipo.getModel();
         jtbEquipo.setModel(modelo_equipo);
-      
-      String[] materiales= {"Descripcion","unidad","P.unitario (b)","Cantidad (A)","Costo (c=a*b)"};
-      DefaultTableModel s = new DefaultTableModel(null, materiales);
-      jtbMaterialesAPU.setModel(s);
-     modMat =(DefaultTableModel) jtbMaterialesAPU.getModel();
-        jtbMaterialesAPU.setModel(modMat);
+        
+        //tabla de Materiales en JFrama CrearAPU
+        modelo_materiales = new DefaultTableModel();
+        String[] materiales= {"DESCRIPCION", "UNIDAD", "CANTIDAD(A)", "P.UNITARIO (B)", "COSTO (C=A*B)"};
+        DefaultTableModel m = new DefaultTableModel(null, materiales);
+        jtbMaterialesAPU.setModel(m);
+        modelo_materiales =(DefaultTableModel) jtbMaterialesAPU.getModel();
+        jtbMaterialesAPU.setModel(modelo_materiales);
+        
+        //tabla de transporte en JFrama CrearAPU
+        modelo_transporte = new DefaultTableModel();
+        String[] transporte= {"DESCRIPCION", "UNIDAD", "CANTIDAD (A)", "TARIFA (B)", "COSTO (C=A*B)"};
+        DefaultTableModel t = new DefaultTableModel(null, transporte);
+        jtbTransporte.setModel(t);
+        modelo_transporte =(DefaultTableModel) jtbTransporte.getModel();
+        jtbTransporte.setModel(modelo_transporte);
+        
+        //tabla de Mano de Obra en JFrama CrearAPU
+        modelo_mano_de_obre = new DefaultTableModel();
+        String[] obra= {"DESCRIPCION", "CANTIDAD (A)", "TARIFA (B)", "COSTO HORA (C=A*B)", "RENDIMIENTO (R)", "COSTO(D=C*R)"};
+        DefaultTableModel o = new DefaultTableModel(null, obra);
+        jtbManoobra.setModel(o);
+        modelo_mano_de_obre =(DefaultTableModel) jtbManoobra.getModel();
+        jtbManoobra.setModel(modelo_mano_de_obre);
     }
  
 
@@ -530,7 +552,9 @@ public class CreaAPU extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(JTBAPU, javax.swing.GroupLayout.DEFAULT_SIZE, 714, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(JTBAPU, javax.swing.GroupLayout.DEFAULT_SIZE, 989, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
