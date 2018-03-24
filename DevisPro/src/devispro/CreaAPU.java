@@ -5,7 +5,13 @@
  */
 package devispro;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import javax.swing.table.*;
+import java.text.NumberFormat;
+import java.util.Locale;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 
 /**
  *
@@ -13,7 +19,7 @@ import javax.swing.table.*;
  */
 public class CreaAPU extends javax.swing.JFrame {
     
-    APU p1;
+    devispro.APU p1;
      public static DefaultTableModel modelo_equipo;
      public static DefaultTableModel modelo_materiales;
      public static DefaultTableModel modelo_transporte;
@@ -50,19 +56,194 @@ public class CreaAPU extends javax.swing.JFrame {
         
         //tabla de Mano de Obra en JFrama CrearAPU
         modelo_mano_de_obre = new DefaultTableModel();
-        String[] obra= {"DESCRIPCION", "CANTIDAD (A)", "TARIFA (B)", "COSTO HORA (C=A*B)", "RENDIMIENTO (R)", "COSTO(D=C*R)"};
+        String[] obra= {"DESCRIPCION", "CANTIDAD (A)", "JORNAL/HORA (B)", "COSTO HORA (C=A*B)", "RENDIMIENTO (R)", "COSTO(D=C*R)"};
         DefaultTableModel o = new DefaultTableModel(null, obra);
         jtbManoobra.setModel(o);
         modelo_mano_de_obre =(DefaultTableModel) jtbManoobra.getModel();
         jtbManoobra.setModel(modelo_mano_de_obre);
+        
+        operacion_materiales();
+        operacion_equipos();
+        operacion_mano_de_obra();
+        operacion_transporte();
+    }
+    
+    private void operacion_equipos(){
+        //Operacion automatica de tabla equipos        
+        jtbEquipo.setModel(operacionEquipos(jtbEquipo.getModel()));
+        modelo_equipo.addTableModelListener(new TableModelListener() {
+            // para evitar concurrencias
+            boolean active = false;
+
+            // evento general
+            public void tableChanged(TableModelEvent e) {
+                // si no tiene una ejecucion y hemos modificado
+                if (!active && e.getType() == TableModelEvent.UPDATE) {
+                    active = true;
+
+                    // recogemos el modelo
+                    TableModel modelo = modelo_equipo;
+                    // y le ponemos el nuevo con los totales calculados
+
+                    jtbEquipo.setModel(operacionEquipos(modelo));
+                    active = false;
+                }
+            }
+
+        });
+    }
+    
+    private void operacion_mano_de_obra(){
+        //Operacion automatica de tabla equipos        
+        jtbManoobra.setModel(operacionManodeObra(jtbManoobra.getModel()));
+        modelo_mano_de_obre.addTableModelListener(new TableModelListener() {
+            // para evitar concurrencias
+            boolean active = false;
+
+            // evento general
+            public void tableChanged(TableModelEvent e) {
+                // si no tiene una ejecucion y hemos modificado
+                if (!active && e.getType() == TableModelEvent.UPDATE) {
+                    active = true;
+
+                    // recogemos el modelo
+                    TableModel modelo = modelo_mano_de_obre;
+                    // y le ponemos el nuevo con los totales calculados
+
+                    jtbManoobra.setModel(operacionManodeObra(modelo));
+                    active = false;
+                }
+            }
+
+        });
+    }
+    
+    private void operacion_materiales(){
+        //Operacion automatica de tabla materiales        
+        jtbMaterialesAPU.setModel(operacionMateriales(jtbMaterialesAPU.getModel()));
+        modelo_materiales.addTableModelListener(new TableModelListener() {
+            // para evitar concurrencias
+            boolean active = false;
+
+            // evento general
+            public void tableChanged(TableModelEvent e) {
+                // si no tiene una ejecucion y hemos modificado
+                if (!active && e.getType() == TableModelEvent.UPDATE) {
+                    active = true;
+
+                    // recogemos el modelo
+                    TableModel modelo = modelo_materiales;
+                    // y le ponemos el nuevo con los totales calculados
+
+                    jtbMaterialesAPU.setModel(operacionMateriales(modelo));
+                    active = false;
+                }
+            }
+
+        });
+    }
+    
+    private void operacion_transporte(){
+        //Operacion automatica de tabla materiales        
+        jtbTransporte.setModel(operacionTransporte(jtbTransporte.getModel()));
+        modelo_transporte.addTableModelListener(new TableModelListener() {
+            // para evitar concurrencias
+            boolean active = false;
+
+            // evento general
+            public void tableChanged(TableModelEvent e) {
+                // si no tiene una ejecucion y hemos modificado
+                if (!active && e.getType() == TableModelEvent.UPDATE) {
+                    active = true;
+
+                    // recogemos el modelo
+                    TableModel modelo = modelo_transporte;
+                    // y le ponemos el nuevo con los totales calculados
+
+                    jtbTransporte.setModel(operacionTransporte(modelo));
+                    active = false;
+                }
+            }
+
+        });
+    }
+    
+    private static TableModel operacionEquipos(TableModel datos) {
+        for (int x = 0; x < datos.getRowCount(); x++) {
+            String valor2 = null;
+            Double valor3 = null;
+            
+            try {
+                valor2 = String.valueOf((Integer.valueOf((String) datos.getValueAt(x, 1)) * (Double.valueOf((String) datos.getValueAt(x, 2)))));
+                datos.setValueAt(valor2, x, 3);
+                valor3 = Double.valueOf((Double.valueOf((String) datos.getValueAt(x, 3)) * (Double.valueOf((String) datos.getValueAt(x, 4)))));
+                DecimalFormatSymbols simbolo = new DecimalFormatSymbols();
+                simbolo.setDecimalSeparator('.');
+                DecimalFormat nf = new DecimalFormat("#########.##",simbolo);
+                String valor4= null;
+                valor4 = String.valueOf(nf.format(valor3));
+                datos.setValueAt(valor4, x, 5);
+            } catch (Exception e) {
+            }
+        }
+
+        return datos;
+    }
+    
+    private static TableModel operacionManodeObra(TableModel datos) {
+        for (int x = 0; x < datos.getRowCount(); x++) {
+            String valor2 = null;
+            Double valor3 = null;
+            
+            try {
+                valor2 = String.valueOf((Integer.valueOf((String) datos.getValueAt(x, 1)) * (Double.valueOf((String) datos.getValueAt(x, 2)))));
+                datos.setValueAt(valor2, x, 3);
+                valor3 = Double.valueOf((Double.valueOf((String) datos.getValueAt(x, 3)) * (Double.valueOf((String) datos.getValueAt(x, 4)))));
+                DecimalFormatSymbols simbolo = new DecimalFormatSymbols();
+                simbolo.setDecimalSeparator('.');
+                DecimalFormat nf = new DecimalFormat("#########.##",simbolo);
+                String valor4= null;
+                valor4 = String.valueOf(nf.format(valor3));
+                datos.setValueAt(valor4, x, 5);
+            } catch (Exception e) {
+            }
+        }
+
+        return datos;
+    }
+    
+    private static TableModel operacionMateriales(TableModel datos) {
+        for (int x = 0; x < datos.getRowCount(); x++) {
+            String valor = null;
+            try {
+                valor = String.valueOf((Integer.valueOf((String) datos.getValueAt(x, 2)) * (Double.valueOf((String) datos.getValueAt(x, 3)))));
+            } catch (Exception e) {
+            }
+            datos.setValueAt(valor, x, 4);
+        }
+
+        return datos;
+    }
+    
+    private static TableModel operacionTransporte(TableModel datos) {
+        for (int x = 0; x < datos.getRowCount(); x++) {
+            String valor = null;
+            try {
+                valor = String.valueOf((Integer.valueOf((String) datos.getValueAt(x, 2)) * (Double.valueOf((String) datos.getValueAt(x, 3)))));
+            } catch (Exception e) {
+            }
+            datos.setValueAt(valor, x, 4);
+        }
+
+        return datos;
     }
  
 
-//    private void abril_p1(){
-//        p1 = new APU();
-//        JTBAPU.add("APU", p1);
-//        JTBAPU.setSelectedComponent(p1);
-//    }
+    private void abril_p1(){
+        p1 = new devispro.APU();
+        JTBAPU.addTab("APU", p1);
+        JTBAPU.setSelectedComponent(p1);
+    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -174,7 +355,7 @@ public class CreaAPU extends javax.swing.JFrame {
                 {null, null, null, null, null, null}
             },
             new String [] {
-                "DESCRIPCION", "CANTIDAD (A)", "TARIFA (B)", "COSTO HORA (C=A*B)", "RENDIMIENTO (R)", "COSTO(D=C*R)"
+                "DESCRIPCION", "CANTIDAD (A)", "JORNAL/HORA (B)", "COSTO HORA (C=A*B)", "RENDIMIENTO (R)", "COSTO(D=C*R)"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -595,7 +776,7 @@ public class CreaAPU extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        
+        abril_p1();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
