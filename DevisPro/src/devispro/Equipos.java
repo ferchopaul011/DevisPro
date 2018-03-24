@@ -10,7 +10,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import javax.swing.DefaultListModel;
-import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -219,20 +218,24 @@ public void nueva_tabla(){
     }//GEN-LAST:event_txtBuscarKeyPressed
 
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
-     String descripcion=""; 
-    Double precio=0.0;
-        if(jtbequipo.getSelectedRow()!=-1){
-            
-            int col =jtbequipo.getSelectedRow();
-         //code=Integer.parseInt(jtbMateriales.getModel().getValueAt(col, 0).toString()) ;
-         descripcion=jtbequipo.getModel().getValueAt(col, 1).toString();
-         precio=Double.parseDouble(jtbequipo.getModel().getValueAt(col, 2).toString());
-         DefaultTableModel AM = (DefaultTableModel)jtbaddequipo.getModel();
-        // String code2=Integer.toString(code);
-         String precio2=String.valueOf(precio);
-         String FilMat[] = {descripcion,precio2};
-         AM.addRow(FilMat);
-     }
+        String descripcion = "";
+        Double costo_hora = 0.0;
+        String cantidad = "0";
+        String tarifa = "0";
+        String rendimiento = "0";
+        String costo = "0";
+        if (jtbequipo.getSelectedRow() != -1) {
+
+            int col = jtbequipo.getSelectedRow();
+            //code=Integer.parseInt(jtbMateriales.getModel().getValueAt(col, 0).toString()) ;
+            descripcion = jtbequipo.getModel().getValueAt(col, 1).toString();
+            costo_hora = Double.parseDouble(jtbequipo.getModel().getValueAt(col, 2).toString());
+            DefaultTableModel AM = (DefaultTableModel) jtbaddequipo.getModel();
+            // String code2=Integer.toString(code);
+            String costo_hora2 = String.valueOf(costo_hora);
+            String FilMat[] = {descripcion, costo_hora2, cantidad, tarifa, rendimiento, costo};
+            AM.addRow(FilMat);
+        }
     }//GEN-LAST:event_jButton2MouseClicked
 
     private void btnquiListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnquiListActionPerformed
@@ -251,9 +254,13 @@ public void nueva_tabla(){
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         for(int i=0; i<jtbaddequipo.getRowCount(); i++){
-            String vector[] = new String[2];
+            String vector[] = new String[6];
             vector[0]=jtbaddequipo.getValueAt(i, 0).toString();
             vector[1]=jtbaddequipo.getValueAt(i, 1).toString();
+            vector[2]=jtbaddequipo.getValueAt(i, 2).toString();
+            vector[3]=jtbaddequipo.getValueAt(i, 3).toString();
+            vector[4]=jtbaddequipo.getValueAt(i, 4).toString();
+            vector[5]=jtbaddequipo.getValueAt(i, 5).toString();
             
             CreaAPU.modelo_equipo.addRow(vector);
         }
