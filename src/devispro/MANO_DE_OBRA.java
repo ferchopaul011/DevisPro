@@ -9,6 +9,7 @@ import static devispro.Conexion.getConnection;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import javax.swing.DefaultListModel;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -16,7 +17,8 @@ import javax.swing.table.DefaultTableModel;
  * @author Crixo
  */
 public class MANO_DE_OBRA extends javax.swing.JFrame {
-DefaultTableModel modelo = new DefaultTableModel();
+
+DefaultListModel mano_de_obra;
     /**
      * Creates new form MANO_DE_OBRA
      */
@@ -42,6 +44,15 @@ DefaultTableModel modelo = new DefaultTableModel();
             System.out.println(e);
         }
     }
+     
+     public void nueva_tabla(){
+    mano_de_obra = new DefaultListModel();
+    String[] obras= {"descripción", "Sueldo_unificado","Salario_minimo", "Decimo_tercero", "decimo_cuarto", 
+        "aporte_patronal", "fondo_reserva", "t_ganado_anual", "jornal_r_dia", "costo_h_hora", "alimento", "transporte", 
+        "costo_h_final"};
+        DefaultTableModel o = new DefaultTableModel(null, obras);
+        jtbAddManoOb.setModel(o);                
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -78,7 +89,7 @@ DefaultTableModel modelo = new DefaultTableModel();
         ));
         jScrollPane4.setViewportView(jTable2);
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("LISTA DE MANO DE OBRA");
 
@@ -105,6 +116,11 @@ DefaultTableModel modelo = new DefaultTableModel();
         });
 
         jButton3.setText("AÑADIR");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jtbManoOb.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -253,8 +269,9 @@ DefaultTableModel modelo = new DefaultTableModel();
          costo_h_final=Double.parseDouble(jtbManoOb.getModel().getValueAt(col, 13).toString());
          DefaultTableModel AM = (DefaultTableModel)jtbAddManoOb.getModel();
         // String code2=Integer.toString(code);
-         String SueldoU=String.valueOf(descripcion);
-         String SalarioM=String.valueOf(sueldo_unificado);
+         String Descripcion=String.valueOf(descripcion);
+         String SueldoU=String.valueOf(sueldo_unificado);
+         String SalarioM=String.valueOf(Salario_minimo);
          String decimoT=String.valueOf(decimo_tercero);
          String decimoC=String.valueOf(decimo_cuarto);
          String aporteP=String.valueOf(aporte_patronal);
@@ -265,7 +282,7 @@ DefaultTableModel modelo = new DefaultTableModel();
          String alimen=String.valueOf(alimento);
          String transp=String.valueOf(transporte);
          String costoHF=String.valueOf(costo_h_final);
-         String FilMat[] = {SueldoU,SalarioM,decimoT,decimoC,aporteP,fondoR,tGanadoA,jornalRD,costoH,alimen,transp,costoHF};
+         String FilMat[] = {Descripcion,SueldoU,SalarioM,decimoT,decimoC,aporteP,fondoR,tGanadoA,jornalRD,costoH,alimen,transp,costoHF};
          AM.addRow(FilMat);
      }
     }//GEN-LAST:event_btnaddlistaMouseClicked
@@ -283,6 +300,19 @@ DefaultTableModel modelo = new DefaultTableModel();
             
         }
     }//GEN-LAST:event_btnquitlistaMouseClicked
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        for(int i=0; i<jtbAddManoOb.getRowCount(); i++){
+            String vector[] = new String[5];
+            vector[0]=jtbAddManoOb.getValueAt(i, 0).toString();
+            vector[2]=jtbAddManoOb.getValueAt(i, 9).toString();
+            vector[4]="0.14";
+
+            CreaAPU.modelo_mano_de_obre.addRow(vector);
+        }
+        nueva_tabla();
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments

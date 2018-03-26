@@ -9,6 +9,7 @@ import static devispro.Conexion.getConnection;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import javax.swing.DefaultListModel;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -16,7 +17,7 @@ import javax.swing.table.DefaultTableModel;
  * @author Crixo
  */
 public class TRANSPORTE extends javax.swing.JFrame {
-
+DefaultListModel transporte = new DefaultListModel();
     /**
      * Creates new form TRANSPORTE
      */
@@ -37,6 +38,13 @@ public class TRANSPORTE extends javax.swing.JFrame {
             System.out.println(e);
         }
     } 
+    
+    public void nueva_tabla(){
+    transporte = new DefaultListModel();
+    String[] equipos= {"descripcion", "unidad", "cantidad", "costo"};
+        DefaultTableModel m = new DefaultTableModel(null, equipos);
+        jtbAddTransporte.setModel(m);                
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -58,7 +66,7 @@ public class TRANSPORTE extends javax.swing.JFrame {
         jScrollPane4 = new javax.swing.JScrollPane();
         jtbAddTransporte = new javax.swing.JTable();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("LISTA DE TRANSPORTE");
 
@@ -90,6 +98,11 @@ public class TRANSPORTE extends javax.swing.JFrame {
         });
 
         jButton3.setText("Añadir");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jtbTransporte.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -239,6 +252,19 @@ public class TRANSPORTE extends javax.swing.JFrame {
             
         }
     }//GEN-LAST:event_btnquitlistaMouseClicked
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        for(int i=0; i<jtbAddTransporte.getRowCount(); i++){
+            String vector[] = new String[4];
+            vector[0]=jtbAddTransporte.getValueAt(i, 0).toString();
+            vector[1]=jtbAddTransporte.getValueAt(i, 1).toString();
+            vector[3]=jtbAddTransporte.getValueAt(i, 3).toString();
+
+            CreaAPU.modelo_transporte.addRow(vector);
+        }
+        nueva_tabla();
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments

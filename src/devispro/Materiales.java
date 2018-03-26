@@ -9,44 +9,25 @@ import static devispro.Conexion.getConnection;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.NumberFormat;
+import java.util.Locale;
 import javax.swing.DefaultListModel;
 import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author Crixo
+ * @author Jefferson Medina
  */
-public class Equipos extends javax.swing.JFrame {
-    //tabla jtbaddequipo de JFrame Equipos
-    DefaultListModel equipo =new DefaultListModel();
+public class Materiales extends javax.swing.JFrame {
+    DefaultListModel material = new DefaultListModel();
     /**
-     * Creates new form Equipos
+     * Creates new form Materiales
      */
-    
-    public Equipos() {
+    public Materiales() {
         initComponents();
         mostrar();
     }
-private void mostrar(){
-        DefaultTableModel modelo = new DefaultTableModel();
-        ResultSet rs = Conexion.getTable("select * from equipos");
-        modelo.setColumnIdentifiers(new Object[]{"cod","descripción","costo_hora"});
-        try {
-            while(rs.next()){
-                modelo.addRow(new Object[]{rs.getInt("cod"),rs.getString("descripción"),rs.getDouble("costo_hora")});
-            }
-            jtbequipo.setModel(modelo);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
 
-public void nueva_tabla(){
-    equipo = new DefaultListModel();
-    String[] equipos= {"Descripcion", "costo hora", "Cantidad", "Tarifa", "rendimient", "costo"};
-        DefaultTableModel e = new DefaultTableModel(null, equipos);
-        jtbaddequipo.setModel(e);                
-}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -57,38 +38,38 @@ public void nueva_tabla(){
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        btnquiList = new javax.swing.JButton();
+        btn_añadir = new javax.swing.JButton();
+        btn_agregar = new javax.swing.JButton();
+        btn_quitar = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         txtBuscar = new javax.swing.JTextField();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jtbequipo = new javax.swing.JTable();
+        jtbmateriales = new javax.swing.JTable();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jtbaddequipo = new javax.swing.JTable();
+        jtbaddmateriales = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel1.setText("LISTA DE EQUIPOS");
+        jLabel1.setText("LISTA DE MATERIALES");
 
-        jButton1.setText("AÑADIR");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btn_añadir.setText("AÑADIR");
+        btn_añadir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btn_añadirActionPerformed(evt);
             }
         });
 
-        jButton2.setText(">");
-        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+        btn_agregar.setText(">");
+        btn_agregar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton2MouseClicked(evt);
+                btn_agregarMouseClicked(evt);
             }
         });
 
-        btnquiList.setText("<");
-        btnquiList.addActionListener(new java.awt.event.ActionListener() {
+        btn_quitar.setText("<");
+        btn_quitar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnquiListActionPerformed(evt);
+                btn_quitarActionPerformed(evt);
             }
         });
 
@@ -100,41 +81,41 @@ public void nueva_tabla(){
             }
         });
 
-        jtbequipo.setModel(new javax.swing.table.DefaultTableModel(
+        jtbmateriales.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Cod", "Descripcion", "costo_hora"
+                "cod", "nombre", "unidad", "precio"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane3.setViewportView(jtbequipo);
+        jScrollPane3.setViewportView(jtbmateriales);
 
-        jtbaddequipo.setModel(new javax.swing.table.DefaultTableModel(
+        jtbaddmateriales.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Descripcion", "costo hora", "Cantidad", "Tarifa", "rendimiento", "costo"
+                "DESCRIPCION", "UNIDAD", "CANTIDAD(A)", "P.UNITARIO (B)", "COSTO (C=A*B)"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane4.setViewportView(jtbaddequipo);
+        jScrollPane4.setViewportView(jtbaddmateriales);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -150,15 +131,15 @@ public void nueva_tabla(){
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 422, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(36, 36, 36)
+                                .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jButton1)
+                                    .addComponent(btn_añadir)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(btnquiList, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(jButton2))
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(btn_agregar)
+                                            .addComponent(btn_quitar))
+                                        .addGap(24, 24, 24)
+                                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addGap(18, 18, 18)
@@ -181,28 +162,77 @@ public void nueva_tabla(){
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                             .addGap(27, 27, 27)
-                            .addComponent(jButton2)
+                            .addComponent(btn_agregar)
                             .addGap(38, 38, 38)
-                            .addComponent(btnquiList))
+                            .addComponent(btn_quitar))
                         .addGroup(layout.createSequentialGroup()
                             .addGap(18, 18, 18)
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addComponent(btn_añadir)
                 .addGap(43, 43, 43))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public void nueva_tabla(){
+    material = new DefaultListModel();
+    String[] equipos= {"DESCRIPCION", "UNIDAD", "CANTIDAD(A)", "P.UNITARIO (B)", "COSTO (C=A*B)"};
+        DefaultTableModel m = new DefaultTableModel(null, equipos);
+        jtbaddmateriales.setModel(m);                
+}
+    
+    private void mostrar(){
+        DefaultTableModel modelo = new DefaultTableModel();
+        ResultSet rs = Conexion.getTable("select * from materiales");
+        modelo.setColumnIdentifiers(new Object[]{"cod","nombre","unidad","precio"});
+        try {
+            while(rs.next()){
+                modelo.addRow(new Object[]{rs.getInt("cod"),rs.getString("nombre"),rs.getString("unidad"),rs.getDouble("Precio")});
+            }
+            jtbmateriales.setModel(modelo);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+    
+    private void btn_añadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_añadirActionPerformed
+        // TODO add your handling code here:
+        for(int i=0; i<jtbaddmateriales.getRowCount(); i++){
+            String vector[] = new String[5];
+            vector[0]=jtbaddmateriales.getValueAt(i, 0).toString();
+            vector[1]=jtbaddmateriales.getValueAt(i, 1).toString();
+            vector[2]=jtbaddmateriales.getValueAt(i, 2).toString();
+            vector[3]=jtbaddmateriales.getValueAt(i, 3).toString();
+            vector[4]=jtbaddmateriales.getValueAt(i, 4).toString();
+
+            CreaAPU.modelo_materiales.addRow(vector);
+        }
+        nueva_tabla();
+    }//GEN-LAST:event_btn_añadirActionPerformed
+
+    private void btn_quitarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_quitarActionPerformed
+        if( jtbmateriales.getSelectedRow()!=-1){
+
+            try {
+                int  elim= jtbmateriales.getSelectedRow();
+                DefaultTableModel ELt = (DefaultTableModel)jtbmateriales.getModel();
+                ELt.removeRow(elim);
+            } catch (Exception e) {
+            }
+
+        }
+    }//GEN-LAST:event_btn_quitarActionPerformed
+
     private void txtBuscarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyPressed
-         String[] equipo= {"cod","descripción","costo_hora"};
-       //String[] Registro= new String[50];
-       
-       String sql = "Select * from equipos where cod like '%"+txtBuscar.getText()+"%'"
-               +"or descripción like '%"+txtBuscar.getText()+"%'"
-               +"or costo_hora like '%"+txtBuscar.getText()+"%'";
-               
+        String[] equipo= {"cod","descripción","costo_hora"};
+        //String[] Registro= new String[50];
+
+        String sql = "Select * from equipos where cod like '%"+txtBuscar.getText()+"%'"
+        +"or descripción like '%"+txtBuscar.getText()+"%'"
+        +"or costo_hora like '%"+txtBuscar.getText()+"%'";
+
         DefaultTableModel modelo = new DefaultTableModel(null, equipo);
         Connection conn = getConnection();
         //Connection conect = conn.conexion();
@@ -212,60 +242,32 @@ public void nueva_tabla(){
             while (rs.next()){
                 modelo.addRow(new Object[]{rs.getInt("cod"),rs.getString("descripción"),rs.getDouble("costo_hora")});
             }
-            jtbequipo.setModel(modelo);
+            jtbmateriales.setModel(modelo);
         } catch (Exception e) {
         }
     }//GEN-LAST:event_txtBuscarKeyPressed
 
-    private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
-        String descripcion = "";
-        Double costo_hora = 0.0;
+    private void btn_agregarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_agregarMouseClicked
+        // TODO add your handling code here:
+        String nombre = "";
+        String unidad = "";
+        Double precio = 0.0;
         String cantidad = "0";
-        String tarifa = "0";
-        String rendimiento = "0";
         String costo = "0";
-        if (jtbequipo.getSelectedRow() != -1) {
+        if (jtbmateriales.getSelectedRow() != -1) {
 
-            int col = jtbequipo.getSelectedRow();
+            int col = jtbmateriales.getSelectedRow();
             //code=Integer.parseInt(jtbMateriales.getModel().getValueAt(col, 0).toString()) ;
-            descripcion = jtbequipo.getModel().getValueAt(col, 1).toString();
-            costo_hora = Double.parseDouble(jtbequipo.getModel().getValueAt(col, 2).toString());
-            DefaultTableModel AM = (DefaultTableModel) jtbaddequipo.getModel();
+            nombre = jtbmateriales.getModel().getValueAt(col, 1).toString();
+            unidad = jtbmateriales.getModel().getValueAt(col, 2).toString();
+            precio = Double.parseDouble(jtbmateriales.getModel().getValueAt(col, 3).toString());
+            DefaultTableModel AM = (DefaultTableModel) jtbaddmateriales.getModel();
             // String code2=Integer.toString(code);
-            String costo_hora2 = String.valueOf(costo_hora);
-            String FilMat[] = {descripcion, costo_hora2, cantidad, tarifa, rendimiento, costo};
+            String precio2 = String.valueOf(precio);
+            String FilMat[] = {/*code2,*/nombre, unidad, cantidad, precio2, costo};
             AM.addRow(FilMat);
         }
-    }//GEN-LAST:event_jButton2MouseClicked
-
-    private void btnquiListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnquiListActionPerformed
-         if( jtbaddequipo.getSelectedRow()!=-1){
-            
-            try {
-                int  elim= jtbaddequipo.getSelectedRow();
-             DefaultTableModel ELt = (DefaultTableModel)jtbaddequipo.getModel(); 
-                ELt.removeRow(elim);
-            } catch (Exception e) {
-            }
-            
-        }
-    }//GEN-LAST:event_btnquiListActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        for(int i=0; i<jtbaddequipo.getRowCount(); i++){
-            String vector[] = new String[6];
-            vector[0]=jtbaddequipo.getValueAt(i, 0).toString();
-            vector[1]=jtbaddequipo.getValueAt(i, 1).toString();
-            vector[2]=jtbaddequipo.getValueAt(i, 2).toString();
-            vector[3]=jtbaddequipo.getValueAt(i, 3).toString();
-            vector[4]=jtbaddequipo.getValueAt(i, 4).toString();
-            vector[5]=jtbaddequipo.getValueAt(i, 5).toString();
-            
-            CreaAPU.modelo_equipo.addRow(vector);
-        }
-        nueva_tabla();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btn_agregarMouseClicked
 
     /**
      * @param args the command line arguments
@@ -284,34 +286,34 @@ public void nueva_tabla(){
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Equipos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Materiales.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Equipos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Materiales.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Equipos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Materiales.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Equipos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Materiales.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Equipos().setVisible(true);
+                new Materiales().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnquiList;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton btn_agregar;
+    private javax.swing.JButton btn_añadir;
+    private javax.swing.JButton btn_quitar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JTable jtbaddequipo;
-    private javax.swing.JTable jtbequipo;
+    private javax.swing.JTable jtbaddmateriales;
+    private javax.swing.JTable jtbmateriales;
     private javax.swing.JTextField txtBuscar;
     // End of variables declaration//GEN-END:variables
 }
